@@ -1,9 +1,10 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Landing from './pages/Landing';
-import './App.css'; 
+import Dashboard from './pages/Dashboard';
+import PrivateRoute from './components/PrivateRoute';
+import './App.css';
 
 function App() {
   return (
@@ -13,6 +14,15 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </div>
     </Router>
