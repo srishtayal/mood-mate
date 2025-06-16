@@ -42,7 +42,6 @@ const NewEntry = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-animation p-6 flex justify-center">
-
       <img src={Sparkle} className="absolute top-4 left-4 w-24 opacity-30" alt="" aria-hidden />
       <img src={Spiral}  className="absolute bottom-0 right-0 w-40 opacity-20" alt="" aria-hidden />
 
@@ -50,7 +49,7 @@ const NewEntry = () => {
         onSubmit={handleSubmit}
         className="glass w-full max-w-xl p-8 rounded-3xl shadow-xl backdrop-blur-lg relative z-10"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+        <h2 className="text-3xl font-bold mb-12 text-center text-gray-800">
           New Journal Entry<span className="text-purple-600">.</span>
         </h2>
 
