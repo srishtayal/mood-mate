@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const username = localStorage.getItem('username') || 'Friend';
 
@@ -84,6 +85,8 @@ const Dashboard = () => {
     day    : 'numeric',
   });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!selected) return;
     setRevealAffirm(false);
@@ -165,9 +168,12 @@ const Dashboard = () => {
         >
           <h2 className="text-xl font-semibold text-gray-700 mb-3">Quick Actions</h2>
           <div className="flex flex-col space-y-4">
-            <button className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition">
-              + New Entry
-            </button>
+            <button
+  onClick={() => navigate('/new-entry')}
+  className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition"
+>
+  + New Entry
+</button>
             <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition">
               View Journal
             </button>

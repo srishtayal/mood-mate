@@ -5,6 +5,7 @@ import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import './App.css';
+import NewEntry from './pages/NewEntry';
 
 function App() {
   return (
@@ -20,6 +21,15 @@ function App() {
             element={
               <PrivateRoute>
                 <Dashboard />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/new-entry"
+            element={
+              <PrivateRoute>
+                <NewEntry />
               </PrivateRoute>
             }
           />
