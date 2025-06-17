@@ -20,11 +20,25 @@ const callHuggingFaceAPI = async (model, inputs) => {
 };
 
 exports.summarizeText = async (text) => {
-  const result = await callHuggingFaceAPI('facebook/bart-large-cnn', text);
+  const result = await callHuggingFaceAPI('sshleifer/distilbart-cnn-12-6', `Summarize this:\n${text}`);
   return result?.[0]?.summary_text || '';
 };
 
 exports.detectEmotion = async (text) => {
-  const result = await callHuggingFaceAPI('j-hartmann/emotion-english-distilroberta-base', text);
-  return result?.[0]?.label || 'Neutral';
+  const result = await callHuggingFaceAPI(
+    'bdotloh/just-another-emotion-classifier',
+    text
+  );
+  
+  const emotions = Array.isArray(result) && Array.isArray(result[0]) ? result[0] : [];
+
+  if (emotions.length > 0) {
+    return emotions
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map((e) => `${e.label}`)
+      .join(', ');
+  }
+
+  return 'neutral';
 };

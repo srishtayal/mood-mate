@@ -169,15 +169,20 @@ const Dashboard = () => {
           <h2 className="text-xl font-semibold text-gray-700 mb-3">Quick Actions</h2>
           <div className="flex flex-col space-y-4">
             <button
-  onClick={() => navigate('/new-entry')}
-  className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition"
->
-  + New Entry
-</button>
-            <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition">
-              View Journal
+            onClick={() => navigate('/new-entry')}
+            className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition"
+            >
+            + New Entry
             </button>
-            <button className="bg-pink-100 text-pink-800 py-2 px-4 rounded-lg hover:bg-pink-200 transition">
+            <button
+            onClick={() => navigate('/journal')}
+            className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition"
+            >
+            View Journal
+            </button>
+            <button 
+            onClick={() => navigate('/reflection')}
+            className="bg-pink-100 text-pink-800 py-2 px-4 rounded-lg hover:bg-pink-200 transition">
               Start Reflection
             </button>
           </div>
