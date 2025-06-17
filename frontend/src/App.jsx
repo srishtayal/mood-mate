@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signup       from './pages/Signup';
 import Login        from './pages/Login';
-import Landing      from './pages/Landing';
+// import Landing      from './pages/Landing';
+import HomeRoute   from './components/HomeRoute';
 import Dashboard    from './pages/Dashboard';
 import NewEntry     from './pages/NewEntry';
 import ViewJournal  from './pages/ViewJournal';  
@@ -14,7 +15,7 @@ function App() {
     <Router>
       <div className="min-h-screen bg-gray-100 text-gray-800">
         <Routes>
-          <Route path="/"           element={<Landing />} />
+          <Route path="/" element={<HomeRoute />} />
           <Route path="/signup"     element={<Signup  />} />
           <Route path="/login"      element={<Login   />} />
 

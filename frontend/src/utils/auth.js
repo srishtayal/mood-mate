@@ -1,0 +1,1 @@
+export const hasToken = () => Boolean(localStorage.getItem('token'));

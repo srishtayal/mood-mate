@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import MoodGraph from '../components/MoodGraph';
+import axios from 'axios';
 
 const username = localStorage.getItem('username') || 'Friend';
 
 const EMOJIS = [
-  { label: 'Excited',   icon: '🤩' },
-  { label: 'Happy',     icon: '😊' },
-  { label: 'Neutral',   icon: '😐' },
-  { label: 'Nervous',   icon: '😬' },
-  { label: 'Anxious',   icon: '😰' },
-  { label: 'Sad',       icon: '😔' },
-  { label: 'Angry',     icon: '😤' },
+  { label: 'Excited', icon: '🤩' },
+  { label: 'Happy', icon: '😊' },
+  { label: 'Neutral', icon: '😐' },
+  { label: 'Nervous', icon: '😬' },
+  { label: 'Anxious', icon: '😰' },
+  { label: 'Sad', icon: '😔' },
+  { label: 'Angry', icon: '😤' },
   { label: 'Depressed', icon: '😢' },
 ];
 
@@ -75,17 +77,37 @@ const AFFIRMATIONS = {
 };
 
 const Dashboard = () => {
-  const [selected, setSelected]         = useState(null);
-  const [affirmation, setAffirmation]   = useState('');
+  const [selected, setSelected] = useState(null);
+  const [affirmation, setAffirmation] = useState('');
   const [revealAffirm, setRevealAffirm] = useState(false);
+  const [userEntries, setUserEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const today = new Date().toLocaleDateString('en-IN', {
     weekday: 'long',
-    month  : 'long',
-    day    : 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 
-  const navigate = useNavigate();
+  useEffect(() => {
+  const fetchEntries = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/entries', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      setUserEntries(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error('Dashboard fetch error →', err);
+      setUserEntries([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchEntries();
+}, []);
 
   useEffect(() => {
     if (!selected) return;
@@ -106,8 +128,7 @@ const Dashboard = () => {
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">
-          Welcome back, {username}{' '}
-          <span role="img" aria-label="wave">👋</span>
+          Welcome back, {username} <span role="img" aria-label="wave">👋</span>
         </h1>
         <p className="text-gray-500 text-lg">{today}</p>
       </div>
@@ -132,10 +153,7 @@ const Dashboard = () => {
                 aria-label={label}
                 className={`group relative transition rounded-full ${ring(label)}`}
               >
-
-                <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2
-                                 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0
-                                 group-hover:opacity-100">
+                <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100">
                   {label}
                 </span>
                 {icon}
@@ -160,7 +178,7 @@ const Dashboard = () => {
           )}
         </motion.div>
 
-         <motion.div
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
@@ -169,38 +187,53 @@ const Dashboard = () => {
           <h2 className="text-xl font-semibold text-gray-700 mb-3">Quick Actions</h2>
           <div className="flex flex-col space-y-4">
             <button
-            onClick={() => navigate('/new-entry')}
-            className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition"
+              onClick={() => navigate('/new-entry')}
+              className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition"
             >
-            + New Entry
+              + New Entry
             </button>
             <button
-            onClick={() => navigate('/journal')}
-            className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition"
+              onClick={() => navigate('/journal')}
+              className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition"
             >
-            View Journal
+              View Journal
             </button>
-            <button 
-            onClick={() => navigate('/reflection')}
-            className="bg-pink-100 text-pink-800 py-2 px-4 rounded-lg hover:bg-pink-200 transition">
+            <button
+              onClick={() => navigate('/reflection')}
+              className="bg-pink-100 text-pink-800 py-2 px-4 rounded-lg hover:bg-pink-200 transition"
+            >
               Start Reflection
             </button>
           </div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="bg-white shadow-xl rounded-xl p-6 md:col-span-2"
-        >
-          <h2 className="text-xl font-semibold text-gray-700 mb-3">
-            Your Mood Trend (Past 7 Days)
-          </h2>
-          <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
-            [Graph Placeholder]
-          </div>
-        </motion.div>
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8 }}
+  className="bg-white/60 backdrop-blur rounded-3xl p-6 shadow-xl md:col-span-2"
+>
+  <h2 className="text-2xl font-bold text-gray-800 mb-6">Your Mood Overview</h2>
+
+  {loading ? (
+    <div className="flex justify-center py-16">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-300
+                      border-t-transparent" />
+    </div>
+  ) : userEntries.length ? (
+    <>
+      <MoodGraph   moodData={userEntries} />
+    </>
+  ) : (
+    <div className="text-center py-16 text-gray-400">
+      No entries yet. Tap <span
+        onClick={() => navigate('/new-entry')}
+        className="text-purple-600 underline cursor-pointer"
+      >+ New Entry</span> to get started!
+    </div>
+  )}
+</motion.div>
+
       </div>
     </div>
   );
