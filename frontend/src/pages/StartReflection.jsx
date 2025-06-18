@@ -23,7 +23,7 @@ const StartReflection = () => {
     setLoading(true);
     try {
       const { data } = await axios.post(
-        'http://localhost:5000/api/ai/analyze',
+        'https://mood-mate-lx9i.onrender.com/api/ai/analyze',
         { text: journal },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );

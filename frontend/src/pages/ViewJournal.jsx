@@ -12,7 +12,7 @@ const ViewJournal = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/entries', {
+        const res = await axios.get('https://mood-mate-lx9i.onrender.com/api/entries', {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setEntries(Array.isArray(res.data) ? res.data : []);

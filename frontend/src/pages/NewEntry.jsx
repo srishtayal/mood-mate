@@ -26,7 +26,7 @@ const NewEntry = () => {
     e.preventDefault();
     try {
       await axios.post(
-        'http://localhost:5000/api/entries',
+        'https://mood-mate-lx9i.onrender.com/api/entries',
         { mood, text, tags },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
